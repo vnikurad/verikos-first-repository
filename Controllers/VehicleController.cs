@@ -25,7 +25,7 @@ namespace AldagiTPL.Controllers
         }*/
 
         [HttpGet]
-        public IActionResult GetVehicles()
+        public IActionResult GetVehicles()   
         {
             return Ok(dbContext.Vehicles.ToList());
         }
