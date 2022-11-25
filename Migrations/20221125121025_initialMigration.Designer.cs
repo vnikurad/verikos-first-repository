@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AldagiTPL.Migrations
 {
     [DbContext(typeof(AldagiTPLDbContext))]
-    [Migration("20221118131858_Create AldagiTPLSchema")]
-    partial class CreateAldagiTPLSchema
+    [Migration("20221125121025_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace AldagiTPL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("AldagiTPL.Models.Client", b =>
+            modelBuilder.Entity("AldagiTPL.Models.Clients.Client", b =>
                 {
                     b.Property<Guid>("ClientId")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,7 @@ namespace AldagiTPL.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("AldagiTPL.Models.TPLRequest", b =>
+            modelBuilder.Entity("AldagiTPL.Models.TPLRequest.TPLRequest", b =>
                 {
                     b.Property<int>("TPLRequestId")
                         .ValueGeneratedOnAdd()
@@ -68,6 +68,10 @@ namespace AldagiTPL.Migrations
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("VehicleId")
                         .HasColumnType("uniqueidentifier");
@@ -81,41 +85,76 @@ namespace AldagiTPL.Migrations
                     b.ToTable("TPLRequests");
                 });
 
-            modelBuilder.Entity("AldagiTPL.Models.Vehicle", b =>
+            modelBuilder.Entity("AldagiTPL.Models.VehicleMarks.VehicleMarks", b =>
+                {
+                    b.Property<Guid>("VehicleMarkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("VehicleMarkName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VehicleMarkId");
+
+                    b.ToTable("VehicleMarks");
+                });
+
+            modelBuilder.Entity("AldagiTPL.Models.VehicleModels.VehicleModels", b =>
+                {
+                    b.Property<Guid>("VehicleModelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VehicleMarkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("VehicleModelName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VehicleModelId");
+
+                    b.ToTable("VehicleModels");
+                });
+
+            modelBuilder.Entity("AldagiTPL.Models.Vehicles.Vehicle", b =>
                 {
                     b.Property<Guid>("VehicleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Mark")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RegistrationNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("VehicleMarkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VehicleModelId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("VehicleYear")
                         .HasColumnType("int");
 
                     b.HasKey("VehicleId");
 
+                    b.HasIndex("VehicleMarkId");
+
+                    b.HasIndex("VehicleModelId");
+
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("AldagiTPL.Models.TPLRequest", b =>
+            modelBuilder.Entity("AldagiTPL.Models.TPLRequest.TPLRequest", b =>
                 {
-                    b.HasOne("AldagiTPL.Models.Client", "Client")
+                    b.HasOne("AldagiTPL.Models.Clients.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AldagiTPL.Models.Vehicle", "Vehicle")
+                    b.HasOne("AldagiTPL.Models.Vehicles.Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -124,6 +163,25 @@ namespace AldagiTPL.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("AldagiTPL.Models.Vehicles.Vehicle", b =>
+                {
+                    b.HasOne("AldagiTPL.Models.VehicleMarks.VehicleMarks", "VehicleMark")
+                        .WithMany()
+                        .HasForeignKey("VehicleMarkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AldagiTPL.Models.VehicleModels.VehicleModels", "VehicleModel")
+                        .WithMany()
+                        .HasForeignKey("VehicleModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VehicleMark");
+
+                    b.Navigation("VehicleModel");
                 });
 #pragma warning restore 612, 618
         }
