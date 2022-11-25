@@ -1,8 +1,9 @@
 ﻿using AldagiTPL.Data;
-using AldagiTPL.Models;
-using Microsoft.AspNetCore.Http;
+using AldagiTPL.Models.Clients;
+using AldagiTPL.Models.VehicleMarks;
+using AldagiTPL.Models.VehicleModels;
+using AldagiTPL.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AldagiTPL.Controllers
 {
@@ -16,13 +17,6 @@ namespace AldagiTPL.Controllers
         {
             this.dbContext = dbContext;
         }
-
-        // ვცდილობ grdb-დან ავიღო მარკები
-        /*public IActionResult Index()
-        {
-            var marks = dbContext.Vehicles.Select(x => x.Mark).Distinct().ToList();
-            return Ok(marks);
-        }*/
 
         [HttpGet]
         public IActionResult GetVehicles()   
@@ -42,18 +36,45 @@ namespace AldagiTPL.Controllers
         [HttpPost]
         public IActionResult AddVehicle(AddVehicle request)
         {
-            var vehicle = new Vehicle()
+            var newVehicle = new Vehicle()
             {
                 VehicleId = new Guid(),
-                Mark = request.Mark,
-                Model = request.Model,
                 VehicleYear = request.VehicleYear,
                 RegistrationNumber = request.RegistrationNumber
             };
 
-            dbContext.Vehicles.Add(vehicle);
+            if (request.Mark != null)
+            {
+                var newVehicleMark = new VehicleMarks()
+                {
+                    VehicleMarkId = new Guid(),
+                    VehicleMarkName = request.Mark.VehicleMarkName
+                };
+
+                dbContext.Add(newVehicleMark);
+                dbContext.SaveChanges();
+                newVehicle.VehicleMark = newVehicleMark;
+            }
+
+            if(request.Model != null)
+            {
+                var newVehicleModel = new VehicleModels()
+                {
+                    VehicleModelId = new Guid(),
+                    VehicleModelName = request.Model.VehicleModelName,
+                    VehicleMarkId = request.Model.VehicleMarkId
+                };
+
+                dbContext.Add(newVehicleModel);
+                dbContext.SaveChanges();
+                newVehicle.VehicleModel = newVehicleModel;
+                    
+            }
+            
+
+            dbContext.Vehicles.Add(newVehicle);
             dbContext.SaveChanges();
-            return Ok(vehicle);
+            return Ok(newVehicle);
         }
 
         [HttpPut]
@@ -64,8 +85,8 @@ namespace AldagiTPL.Controllers
 
             if (updateRequest != null)
             {
-                updateRequest.Mark = request.Mark;
-                updateRequest.Model = request.Model;
+                updateRequest.VehicleMark = request.Mark;
+                updateRequest.VehicleModel = request.Model;
                 updateRequest.VehicleYear = request.VehicleYear;
                 updateRequest.RegistrationNumber = request.RegistrationNumber;
 

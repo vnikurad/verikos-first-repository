@@ -1,4 +1,8 @@
-﻿using AldagiTPL.Models;
+﻿using AldagiTPL.Models.Clients;
+using AldagiTPL.Models.TPLRequest;
+using AldagiTPL.Models.VehicleMarks;
+using AldagiTPL.Models.VehicleModels;
+using AldagiTPL.Models.Vehicles;
 using Microsoft.EntityFrameworkCore;
 
 namespace AldagiTPL.Data
@@ -12,7 +16,7 @@ namespace AldagiTPL.Data
         public DbSet<TPLRequest> TPLRequests { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
-        public  DbSet<AutoMark> AutoMarks { get; set; } = null!;
-        public  DbSet<AutoModel> AutoModels { get; set; } = null!;
+        public  DbSet<VehicleMarks> VehicleMarks { get; set; } = null!;
+        public  DbSet<VehicleModels> VehicleModels { get; set; } = null!;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AldagiTPL.Data;
-using AldagiTPL.Models;
-using Microsoft.AspNetCore.Http;
+using AldagiTPL.Models.Clients;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AldagiTPL.Controllers
