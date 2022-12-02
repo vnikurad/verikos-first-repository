@@ -4,6 +4,7 @@ using AldagiTPL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AldagiTPL.Migrations
 {
     [DbContext(typeof(AldagiTPLDbContext))]
-    partial class AldagiTPLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221130110848_adding new field")]
+    partial class addingnewfield
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,23 +80,6 @@ namespace AldagiTPL.Migrations
                     b.ToTable("TPLConditions");
                 });
 
-            modelBuilder.Entity("AldagiTPL.Models.TPLConditions.TPLStatuses", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"), 1L, 1);
-
-                    b.Property<string>("TPLStatusTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StatusId");
-
-                    b.ToTable("TPLStatuses");
-                });
-
             modelBuilder.Entity("AldagiTPL.Models.TPLRequest.TPLRequest", b =>
                 {
                     b.Property<int>("TPLRequestId")
@@ -106,11 +91,15 @@ namespace AldagiTPL.Migrations
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("LimitId")
+                    b.Property<int>("ClientIntegration")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int>("LimitAmount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("VehicleId")
                         .HasColumnType("uniqueidentifier");
@@ -119,9 +108,7 @@ namespace AldagiTPL.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("LimitId");
-
-                    b.HasIndex("StatusId");
+                    b.HasIndex("LimitAmount");
 
                     b.HasIndex("VehicleId");
 
@@ -199,13 +186,7 @@ namespace AldagiTPL.Migrations
 
                     b.HasOne("AldagiTPL.Models.TPLConditions.TPLLimit", "Limit")
                         .WithMany()
-                        .HasForeignKey("LimitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AldagiTPL.Models.TPLConditions.TPLStatuses", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("LimitAmount")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -218,8 +199,6 @@ namespace AldagiTPL.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Limit");
-
-                    b.Navigation("Status");
 
                     b.Navigation("Vehicle");
                 });

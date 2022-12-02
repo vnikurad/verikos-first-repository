@@ -4,6 +4,7 @@ using AldagiTPL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AldagiTPL.Migrations
 {
     [DbContext(typeof(AldagiTPLDbContext))]
-    partial class AldagiTPLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221202111627_new db")]
+    partial class newdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,17 +82,17 @@ namespace AldagiTPL.Migrations
 
             modelBuilder.Entity("AldagiTPL.Models.TPLConditions.TPLStatuses", b =>
                 {
-                    b.Property<int>("StatusId")
+                    b.Property<int>("TPLStatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TPLStatusId"), 1L, 1);
 
                     b.Property<string>("TPLStatusTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("StatusId");
+                    b.HasKey("TPLStatusId");
 
                     b.ToTable("TPLStatuses");
                 });
@@ -109,7 +111,10 @@ namespace AldagiTPL.Migrations
                     b.Property<int>("LimitId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int>("StatusTPLStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TPLStatusId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("VehicleId")
@@ -121,7 +126,7 @@ namespace AldagiTPL.Migrations
 
                     b.HasIndex("LimitId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusTPLStatusId");
 
                     b.HasIndex("VehicleId");
 
@@ -205,7 +210,7 @@ namespace AldagiTPL.Migrations
 
                     b.HasOne("AldagiTPL.Models.TPLConditions.TPLStatuses", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("StatusTPLStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
