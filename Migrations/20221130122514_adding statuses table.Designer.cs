@@ -4,6 +4,7 @@ using AldagiTPL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AldagiTPL.Migrations
 {
     [DbContext(typeof(AldagiTPLDbContext))]
-    partial class AldagiTPLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221130122514_adding statuses table")]
+    partial class addingstatusestable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,23 +80,6 @@ namespace AldagiTPL.Migrations
                     b.ToTable("TPLConditions");
                 });
 
-            modelBuilder.Entity("AldagiTPL.Models.TPLConditions.TPLStatuses", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"), 1L, 1);
-
-                    b.Property<string>("TPLStatusTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StatusId");
-
-                    b.ToTable("TPLStatuses");
-                });
-
             modelBuilder.Entity("AldagiTPL.Models.TPLRequest.TPLRequest", b =>
                 {
                     b.Property<int>("TPLRequestId")
@@ -109,8 +94,9 @@ namespace AldagiTPL.Migrations
                     b.Property<int>("LimitId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("VehicleId")
                         .HasColumnType("uniqueidentifier");
@@ -121,11 +107,26 @@ namespace AldagiTPL.Migrations
 
                     b.HasIndex("LimitId");
 
-                    b.HasIndex("StatusId");
-
                     b.HasIndex("VehicleId");
 
                     b.ToTable("TPLRequests");
+                });
+
+            modelBuilder.Entity("AldagiTPL.Models.TPLStatuses.TPLStatuses", b =>
+                {
+                    b.Property<int>("TPLStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TPLStatusId"), 1L, 1);
+
+                    b.Property<string>("TPLStatusTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TPLStatusId");
+
+                    b.ToTable("TPLStatuses");
                 });
 
             modelBuilder.Entity("AldagiTPL.Models.VehicleMarks.VehicleMarks", b =>
@@ -203,12 +204,6 @@ namespace AldagiTPL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AldagiTPL.Models.TPLConditions.TPLStatuses", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AldagiTPL.Models.Vehicles.Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId")
@@ -218,8 +213,6 @@ namespace AldagiTPL.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Limit");
-
-                    b.Navigation("Status");
 
                     b.Navigation("Vehicle");
                 });
