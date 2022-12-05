@@ -3,8 +3,8 @@ using AldagiTPL.Models.Clients;
 using AldagiTPL.Models.Responses.Tpl;
 using AldagiTPL.Models.TPLConditions;
 using AldagiTPL.Models.TPLRequest;
-using AldagiTPL.Models.VehicleMarks;
-using AldagiTPL.Models.VehicleModels;
+using AldagiTPL.Models.Marks;
+using AldagiTPL.Models.Models;
 using AldagiTPL.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,10 +34,20 @@ namespace AldagiTPL.Controllers
         {
             var tplRequest = dbContext.TPLRequests.Include(x => x.Limit)
                 .Include(x => x.Status)
+                .Include(x => x.Client)
+                .Include(x => x.Vehicle)
                 .FirstOrDefault(x => x.TPLRequestId == id);
 
             var responseModel = new GetTplRequestResponseModel()
             {
+                FirstName = tplRequest.Client.FirstName,
+                LastName = tplRequest.Client.LastName,
+                PersonalNumber = tplRequest.Client.PersonalNumber,
+                DateOfBirth = tplRequest.Client.DateOfBirth,
+                Phone = tplRequest.Client.Phone,
+                Email = tplRequest.Client.Email,
+                VehicleYear = tplRequest.Vehicle.VehicleYear,
+                RegistrationNumber = tplRequest.Vehicle.RegistrationNumber,
                 Limit = tplRequest.Limit.LimitAmount,
                 Premium = tplRequest.Limit.Premium,
                 Status = tplRequest.Status.TPLStatusTitle
@@ -48,7 +58,7 @@ namespace AldagiTPL.Controllers
 
         [HttpPost]
         public IActionResult AddTPLRequest(CreateTPLRequest request)
-        {            
+        {
             var newTplRequest = new TPLRequest()
             {
                 StatusId = request.StatusId,
@@ -75,30 +85,11 @@ namespace AldagiTPL.Controllers
 
             if (request.Vehicle != null)
             {
-                var newVehicleMark = new VehicleMarks()
-                {
-                    VehicleMarkId = Guid.NewGuid(),
-                    VehicleMarkName = request.Vehicle.VehicleMark.VehicleMarkName
-                };
-
-                dbContext.Add(newVehicleMark);
-                dbContext.SaveChanges();
-
-                var newVehicleModel = new VehicleModels()
-                {
-                    VehicleMarkId = newVehicleMark.VehicleMarkId,
-                    VehicleModelId = Guid.NewGuid(),
-                    VehicleModelName = request.Vehicle.VehicleModel.VehicleModelName
-                };
-
-                dbContext.VehicleModels.Add(newVehicleModel);
-                dbContext.SaveChanges();
-
                 var newVehicle = new Vehicle()
                 {
                     VehicleId = new Guid(),
-                    VehicleMark = newVehicleMark,
-                    VehicleModel = newVehicleModel,
+                    VehicleMarkId = request.Vehicle.VehicleMarkId,
+                    VehicleModelId = request.Vehicle.VehicleModelId,
                     VehicleYear = request.Vehicle.VehicleYear,
                     RegistrationNumber = request.Vehicle.RegistrationNumber
                 };
@@ -106,12 +97,54 @@ namespace AldagiTPL.Controllers
                 dbContext.Add(newVehicle);
                 dbContext.SaveChanges();
                 newTplRequest.Vehicle = newVehicle;
-            }                
+            }
 
             dbContext.TPLRequests.Add(newTplRequest);
             dbContext.SaveChanges();
 
             return Ok(newTplRequest);
+        }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public IActionResult EditTPLRequest([FromRoute] int id, EditTPLRequest request)
+        {
+            var updateTPLRequest = dbContext.TPLRequests.Find(id);
+
+            if (updateTPLRequest != null)
+            {
+                updateTPLRequest.StatusId = request.StatusId;
+
+                dbContext.SaveChanges();
+                return Ok(updateTPLRequest);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public IActionResult DeleteTPLRequest([FromRoute] int id)
+        {
+            var tplRequest = dbContext.TPLRequests.Find(id);
+
+            if (tplRequest != null && tplRequest.StatusId != 2)
+            {
+                dbContext.Remove(tplRequest);
+                dbContext.SaveChanges();
+                return Ok(tplRequest);
+            }
+            else if (tplRequest.StatusId == 2)
+            {
+                return BadRequest("გადახდილი სტატუსის მქონე ჩანაწერის წაშლა არ შეიძლება");
+            }
+            else
+            {
+                return NotFound();
+            }
+
         }
 
     }

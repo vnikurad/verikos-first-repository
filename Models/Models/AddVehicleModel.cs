@@ -1,4 +1,4 @@
-﻿namespace AldagiTPL.Models.VehicleModels
+﻿namespace AldagiTPL.Models.Models
 {
     public class AddVehicleModel
     {

@@ -1,7 +1,7 @@
 ﻿using AldagiTPL.Data;
 using AldagiTPL.Models.Clients;
-using AldagiTPL.Models.VehicleMarks;
-using AldagiTPL.Models.VehicleModels;
+using AldagiTPL.Models.Marks;
+using AldagiTPL.Models.Models;
 using AldagiTPL.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,36 +40,38 @@ namespace AldagiTPL.Controllers
             {
                 VehicleId = new Guid(),
                 VehicleYear = request.VehicleYear,
-                RegistrationNumber = request.RegistrationNumber
+                RegistrationNumber = request.RegistrationNumber,
+                VehicleMarkId = request.VehicleMarkId,
+                VehicleModelId = request.VehicleModelId
             };
 
-            if (request.Mark != null)
-            {
-                var newVehicleMark = new VehicleMarks()
-                {
-                    VehicleMarkId = new Guid(),
-                    VehicleMarkName = request.Mark.VehicleMarkName
-                };
+            //if (request.Mark != null)
+            //{
+            //    var newVehicleMark = new VehicleMarks()
+            //    {
+            //        VehicleMarkId = new Guid(),
+            //        VehicleMarkName = request.Mark.VehicleMarkName
+            //    };
 
-                dbContext.Add(newVehicleMark);
-                dbContext.SaveChanges();
-                newVehicle.VehicleMark = newVehicleMark;
-            }
+            //    dbContext.Add(newVehicleMark);
+            //    dbContext.SaveChanges();
+            //    newVehicle.VehicleMark = newVehicleMark;
+            //}
 
-            if(request.Model != null)
-            {
-                var newVehicleModel = new VehicleModels()
-                {
-                    VehicleModelId = new Guid(),
-                    VehicleModelName = request.Model.VehicleModelName,
-                    VehicleMarkId = request.Model.VehicleMarkId
-                };
+            //if(request.Model != null)
+            //{
+            //    var newVehicleModel = new VehicleModels()
+            //    {
+            //        VehicleModelId = new Guid(),
+            //        VehicleModelName = request.Model.VehicleModelName,
+            //        VehicleMarkId = request.Model.VehicleMarkId
+            //    };
 
-                dbContext.Add(newVehicleModel);
-                dbContext.SaveChanges();
-                newVehicle.VehicleModel = newVehicleModel;
+            //    dbContext.Add(newVehicleModel);
+            //    dbContext.SaveChanges();
+            //    newVehicle.VehicleModel = newVehicleModel;
                     
-            }
+            //}
             
 
             dbContext.Vehicles.Add(newVehicle);
@@ -85,8 +87,8 @@ namespace AldagiTPL.Controllers
 
             if (updateRequest != null)
             {
-                updateRequest.VehicleMark = request.Mark;
-                updateRequest.VehicleModel = request.Model;
+                updateRequest.VehicleMarkId = request.VehicleMarkId;
+                updateRequest.VehicleModelId = request.VehicleModelId;
                 updateRequest.VehicleYear = request.VehicleYear;
                 updateRequest.RegistrationNumber = request.RegistrationNumber;
 

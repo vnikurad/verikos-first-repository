@@ -1,7 +1,7 @@
 ﻿using AldagiTPL.Models.Clients;
 using AldagiTPL.Models.TPLRequest;
-using AldagiTPL.Models.VehicleMarks;
-using AldagiTPL.Models.VehicleModels;
+using AldagiTPL.Models.Marks;
+using AldagiTPL.Models.Models;
 using AldagiTPL.Models.Vehicles;
 using AldagiTPL.Models.TPLConditions;
 using Microsoft.EntityFrameworkCore;

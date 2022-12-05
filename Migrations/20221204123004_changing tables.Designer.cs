@@ -4,6 +4,7 @@ using AldagiTPL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AldagiTPL.Migrations
 {
     [DbContext(typeof(AldagiTPLDbContext))]
-    partial class AldagiTPLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221204123004_changing tables")]
+    partial class changingtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,6 +184,10 @@ namespace AldagiTPL.Migrations
 
                     b.HasKey("VehicleId");
 
+                    b.HasIndex("VehicleMarkId");
+
+                    b.HasIndex("VehicleModelId");
+
                     b.ToTable("Vehicles");
                 });
 
@@ -218,6 +224,25 @@ namespace AldagiTPL.Migrations
                     b.Navigation("Status");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("AldagiTPL.Models.Vehicles.Vehicle", b =>
+                {
+                    b.HasOne("AldagiTPL.Models.Marks.VehicleMarks", "VehicleMark")
+                        .WithMany()
+                        .HasForeignKey("VehicleMarkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AldagiTPL.Models.Models.VehicleModels", "VehicleModel")
+                        .WithMany()
+                        .HasForeignKey("VehicleModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VehicleMark");
+
+                    b.Navigation("VehicleModel");
                 });
 #pragma warning restore 612, 618
         }

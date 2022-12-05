@@ -4,6 +4,7 @@ using AldagiTPL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AldagiTPL.Migrations
 {
     [DbContext(typeof(AldagiTPLDbContext))]
-    partial class AldagiTPLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221205112919_changes againagain")]
+    partial class changesagainagain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,11 +144,24 @@ namespace AldagiTPL.Migrations
                     b.Property<int>("LimitId")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("MarkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ModelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RegistrationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("VehicleId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("VehicleYear")
+                        .HasColumnType("int");
 
                     b.HasKey("TPLRequestId");
 
