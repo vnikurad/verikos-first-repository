@@ -4,6 +4,7 @@ using AldagiTPL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AldagiTPL.Migrations
 {
     [DbContext(typeof(AldagiTPLDbContext))]
-    partial class AldagiTPLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221205115704_changes againagain4")]
+    partial class changesagainagain4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

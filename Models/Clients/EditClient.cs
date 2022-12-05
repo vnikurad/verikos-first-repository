@@ -16,13 +16,11 @@ namespace AldagiTPL.Models.Clients
         public string LastName { get; set; }
 
         [Column(TypeName = "nvarchar(11)")]
-        [DisplayName("Personal Number")]
         [Required]
         [MaxLength(11, ErrorMessage = "Maximum 11 characters")]
         public string PersonalNumber { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:MMM-dd-yy}")]
-        [DisplayName("Date Of Birth")]
         [Required]
         public DateTime DateOfBirth { get; set; }
 
@@ -31,6 +29,7 @@ namespace AldagiTPL.Models.Clients
         [Required]
         public string Phone { get; set; }
 
+        [EmailAddress]
         public string Email { get; set; }
     }
 }

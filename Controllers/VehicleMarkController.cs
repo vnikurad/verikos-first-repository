@@ -1,5 +1,5 @@
 ﻿using AldagiTPL.Data;
-using AldagiTPL.Models.VehicleMarks;
+using AldagiTPL.Models.Marks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AldagiTPL.Controllers

@@ -1,4 +1,4 @@
-﻿namespace AldagiTPL.Models.VehicleMarks
+﻿namespace AldagiTPL.Models.Marks
 {
     public class AddVehicleMark
     {

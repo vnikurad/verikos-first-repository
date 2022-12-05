@@ -2,8 +2,8 @@
 {
     public class AddVehicle
     {
-        public VehicleMarks.VehicleMarks Mark { get; set; }
-        public VehicleModels.VehicleModels Model { get; set; }
+        public Guid VehicleMarkId { get; set; }
+        public Guid VehicleModelId { get; set; }
         public int VehicleYear { get; set; }
         public string RegistrationNumber { get; set; }
     }

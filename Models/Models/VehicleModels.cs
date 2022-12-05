@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 
-namespace AldagiTPL.Models.VehicleModels
+namespace AldagiTPL.Models.Models
 {
     public class VehicleModels
     {

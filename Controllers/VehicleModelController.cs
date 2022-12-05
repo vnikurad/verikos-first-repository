@@ -1,6 +1,6 @@
 ﻿using AldagiTPL.Data;
-using AldagiTPL.Models.VehicleMarks;
-using AldagiTPL.Models.VehicleModels;
+using AldagiTPL.Models.Marks;
+using AldagiTPL.Models.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
