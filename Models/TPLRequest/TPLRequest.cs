@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using AldagiTPL.Models.Clients;
 using AldagiTPL.Models.Vehicles;
 using AldagiTPL.Models.TPLConditions;
+using System.Drawing;
 
 namespace AldagiTPL.Models.TPLRequest
 {
@@ -16,6 +17,7 @@ namespace AldagiTPL.Models.TPLRequest
         public int StatusId { get; set; }
         public TPLLimit Limit { get; set; }
         public int LimitId { get; set; }
+        public byte Image { get; set; }
 
     }
 }

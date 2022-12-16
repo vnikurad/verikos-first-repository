@@ -15,17 +15,16 @@ namespace AldagiTPL.Models.Clients
         [Required]
         public string LastName { get; set; }
 
-        [Column(TypeName = "nvarchar(11)")]
+        [RegularExpression("[0-9]{11}")]
         [Required]
-        [MaxLength(11, ErrorMessage = "Maximum 11 characters")]
+        //[MaxLength(11, ErrorMessage = "Maximum 11 characters")]
         public string PersonalNumber { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:MMM-dd-yy}")]
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        [Column(TypeName = "nvarchar(9)")]
-        [RegularExpression("([0-9]+)")]
+        [RegularExpression("((5)[0-9]{8})")]
         [Required]
         public string Phone { get; set; }
 

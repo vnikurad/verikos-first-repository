@@ -1,5 +1,7 @@
 using AldagiTPL.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -31,3 +35,20 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
+
+var serilogConfig = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .WriteTo.Console()
+    .WriteTo.File("logs\\log-{Date}.txt", restrictedToMinimumLevel: LogEventLevel.Information)
+     .ReadFrom.Configuration(config);
+
+
+Log.Logger = serilogConfig.CreateLogger();
