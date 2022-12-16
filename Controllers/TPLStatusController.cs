@@ -30,6 +30,7 @@ namespace AldagiTPL.Controllers
             {
                 TPLStatusTitle = request.TPLStatusTitle
             };
+
             dbContext.TPLStatuses.Add(newStatus);
             dbContext.SaveChanges();
             return Ok(newStatus);
